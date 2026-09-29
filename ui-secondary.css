@@ -1,0 +1,747 @@
+/*
+ * Netrok Muse secondary-surface refinement
+ *
+ * Layer this file after the assembled candidate stylesheets. It only targets
+ * existing DOM hooks from the artifacts, automation, workspace-capabilities,
+ * terminal, Git, workflow, and approval-bridge surfaces. The visual language
+ * is intentionally quiet: thin rules and grouped rows carry hierarchy while
+ * actions retain the existing button classes and behavior.
+ */
+
+:root {
+  --muse-secondary-line: var(--border, #d9e0e6);
+  --muse-secondary-line-strong: var(--border-strong, #bbc6d0);
+  --muse-secondary-fill: var(--surface-2, #f6f8fa);
+  --muse-secondary-fill-raised: var(--surface, #ffffff);
+  --muse-secondary-muted: var(--muted, #5b6875);
+  --muse-secondary-faint: var(--faint, #667480);
+  --muse-secondary-accent: var(--focus, #145cb2);
+  --muse-secondary-success: var(--success, #167451);
+  --muse-secondary-danger: var(--danger, #b73535);
+}
+
+html[data-theme="dark"] {
+  --muse-secondary-line: var(--border, #2b2b2b);
+  --muse-secondary-line-strong: var(--border-strong, #414141);
+  --muse-secondary-fill: var(--surface-2, #181818);
+  --muse-secondary-fill-raised: var(--surface, #111111);
+  --muse-secondary-muted: var(--muted, #a0a0a0);
+  --muse-secondary-faint: var(--faint, #777777);
+  --muse-secondary-accent: var(--focus, #d2d2d2);
+  --muse-secondary-success: var(--success, #8bd1b0);
+  --muse-secondary-danger: var(--danger, #ff9b93);
+}
+
+/* Shared secondary-pane rhythm. The pane remains the scroll owner. */
+#pane-content {
+  container-type: inline-size;
+}
+
+#pane-content > .aven-files,
+#pane-content > .aven-workspace-tools,
+#pane-content > .aven-automation-view,
+#pane-content > .terminal-surface,
+#pane-content > .git-settings {
+  min-width: 0;
+}
+
+/* Artifacts: sparse, table-like rows with the file title and state first. */
+.aven-workspace-tools-view:has(.aven-workspace-tools-artifact-list) {
+  gap: 12px;
+  padding-top: 16px;
+}
+
+.aven-workspace-tools-view:has(.aven-workspace-tools-artifact-list) .aven-workspace-tools-header {
+  padding-bottom: 12px;
+}
+
+.aven-workspace-tools-artifact-list {
+  gap: 0;
+  margin: 2px 0 0;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.aven-workspace-tools-artifact {
+  display: block;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--muse-secondary-line);
+  border-radius: 0;
+  background: transparent;
+}
+
+.aven-workspace-tools-artifact-details > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(110px, 34%);
+  gap: 12px;
+  align-items: center;
+  min-height: 48px;
+  padding: 9px 4px;
+  color: var(--text, #171717);
+  cursor: pointer;
+  list-style: none;
+}
+
+.aven-workspace-tools-artifact-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.aven-workspace-tools-artifact-details > summary::before {
+  width: 12px;
+  color: var(--muse-secondary-faint);
+  content: "›";
+  font-size: 16px;
+  line-height: 1;
+  transform: translateY(-1px);
+}
+
+.aven-workspace-tools-artifact-details > summary {
+  grid-template-columns: 12px minmax(0, 1fr) minmax(110px, 34%);
+}
+
+.aven-workspace-tools-artifact-details > summary > strong {
+  min-width: 0;
+  overflow: hidden;
+  font-size: 12px;
+  font-weight: 600;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools-artifact-details > summary > .aven-workspace-tools-filename {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muse-secondary-muted);
+  font: 11px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools-artifact-details[open] > summary {
+  background: color-mix(in srgb, var(--muse-secondary-fill) 72%, transparent);
+}
+
+.aven-workspace-tools-artifact-details[open] > summary::before {
+  content: "⌄";
+}
+
+.aven-workspace-tools-artifact-details > .aven-workspace-tools-card-top,
+.aven-workspace-tools-artifact-details > .aven-workspace-tools-raw,
+.aven-workspace-tools-artifact-details > .aven-workspace-tools-provenance {
+  margin-left: 16px;
+  margin-right: 4px;
+}
+
+.aven-workspace-tools-artifact-details > .aven-workspace-tools-card-top {
+  align-items: baseline;
+  padding: 10px 0 8px;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.aven-workspace-tools-artifact-details > .aven-workspace-tools-card-top h3 {
+  font-size: 11px;
+}
+
+.aven-workspace-tools-artifact .aven-workspace-tools-raw {
+  max-height: 250px;
+  margin-top: 0;
+  padding: 10px;
+  border: 1px solid var(--muse-secondary-line);
+  border-radius: 6px;
+  background: var(--muse-secondary-fill-raised);
+  font-size: 10px;
+}
+
+.aven-workspace-tools-artifact .aven-workspace-tools-provenance {
+  margin-top: 10px;
+  margin-bottom: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--muse-secondary-line);
+  font-size: 10px;
+}
+
+.aven-workspace-tools-artifact > .button-secondary,
+.aven-workspace-tools-artifact > .aven-generated-file-preview {
+  margin-left: 16px;
+  margin-bottom: 12px;
+}
+
+/* Schedules: align the recurring task rows like a compact operations list. */
+.aven-automation-card {
+  grid-template-columns: minmax(0, 1.35fr) minmax(150px, 1fr) auto;
+  gap: 8px 16px;
+  align-items: start;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 0;
+  border-radius: 0;
+  border-top: 1px solid var(--muse-secondary-line);
+  padding: 13px 2px;
+  background: transparent;
+}
+
+.aven-automation-card:last-child {
+  border-bottom: 1px solid var(--muse-secondary-line);
+}
+
+.aven-automation-card > .aven-automation-card-top {
+  grid-column: 1;
+  align-items: baseline;
+}
+
+.aven-automation-card > .aven-automation-card-top h3 {
+  font-size: 12px;
+}
+
+.aven-automation-card > .aven-automation-body,
+.aven-automation-card > .aven-automation-meta,
+.aven-automation-card > .aven-automation-warning {
+  grid-column: 2;
+  align-self: center;
+  margin: 0;
+}
+
+.aven-automation-card > .aven-automation-body {
+  color: var(--text, #171717);
+  font-size: 11px;
+}
+
+.aven-automation-card > .aven-automation-meta {
+  font-size: 10px;
+}
+
+.aven-automation-card > .aven-automation-card-actions {
+  grid-column: 3;
+  grid-row: 1 / span 5;
+  justify-content: flex-end;
+  align-self: center;
+  min-width: 82px;
+}
+
+.aven-automation-card > .aven-automation-history {
+  grid-column: 1 / -1;
+  margin-top: 2px;
+}
+
+.aven-automation-card .aven-automation-badge {
+  padding: 2px 6px;
+  font-size: 9px;
+}
+
+.aven-automation-card .aven-automation-history-row {
+  padding: 3px 0;
+}
+
+.aven-automation-card .aven-automation-history-row + .aven-automation-history-row {
+  border-top: 1px solid color-mix(in srgb, var(--muse-secondary-line) 72%, transparent);
+}
+
+.aven-automation-section:has(> [data-schedule-id]) > h3 {
+  margin-bottom: 0;
+}
+
+.aven-automation-form,
+.aven-automation-alert,
+.aven-automation-registry-card {
+  border-radius: 8px;
+  background: var(--muse-secondary-fill);
+}
+
+.aven-automation-form {
+  padding: 12px;
+}
+
+/* Plugins and connections: status cards remain distinct without dashboard chrome. */
+.aven-automation-registry-list {
+  gap: 0;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.aven-automation-registry-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(150px, 36%);
+  gap: 6px 18px;
+  border: 0;
+  border-bottom: 1px solid var(--muse-secondary-line);
+  border-radius: 0;
+  padding: 12px 2px;
+  background: transparent;
+}
+
+.aven-automation-registry-card > .aven-automation-card-top {
+  grid-column: 1 / -1;
+  align-items: baseline;
+}
+
+.aven-automation-registry-card > .aven-automation-body {
+  grid-column: 1;
+  margin: 0;
+  font-size: 11px;
+}
+
+.aven-automation-registry-card > .aven-automation-meta {
+  grid-column: 2;
+  margin: 0;
+  font-size: 10px;
+}
+
+.aven-automation-registry-card > .aven-automation-plugin-select {
+  grid-column: 1 / -1;
+  justify-self: start;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid color-mix(in srgb, var(--muse-secondary-line) 72%, transparent);
+}
+
+.aven-automation-registry-card .aven-automation-badge {
+  padding: 2px 6px;
+  font-size: 9px;
+}
+
+.aven-capability-session {
+  gap: 6px;
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--muse-secondary-fill);
+}
+
+.aven-capability-session[data-session-status="connected"] {
+  border-color: color-mix(in srgb, var(--muse-secondary-success) 58%, var(--muse-secondary-line));
+}
+
+.aven-capability-session h3 {
+  font-size: 12px;
+}
+
+.aven-capability-session-actions {
+  margin-top: 6px;
+}
+
+/* Ordered workflow cards: the left rule provides sequence without extra chrome. */
+.workflow-card {
+  display: grid;
+  gap: 10px;
+  max-width: 100%;
+  margin: 12px 0;
+  border: 1px solid var(--muse-secondary-line);
+  border-left: 3px solid var(--muse-secondary-line-strong);
+  border-radius: 8px;
+  padding: 13px 14px;
+  color: var(--text, #171717);
+  background: var(--muse-secondary-fill);
+}
+
+.workflow-card.execution-approval-card {
+  border-left-color: var(--muse-secondary-accent);
+}
+
+.workflow-card.change-review-card {
+  border-left-color: var(--muse-secondary-success);
+}
+
+.workflow-kicker {
+  margin: 0;
+  color: var(--muse-secondary-faint);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.workflow-card h3,
+.workflow-review h4 {
+  margin: 0;
+}
+
+.workflow-card h3 {
+  font-size: 14px;
+}
+
+.workflow-details {
+  display: grid;
+  gap: 0;
+  margin: 0;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.workflow-detail {
+  display: grid;
+  grid-template-columns: minmax(96px, 23%) minmax(0, 1fr);
+  gap: 12px;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--muse-secondary-line);
+}
+
+.workflow-detail dt {
+  color: var(--muse-secondary-muted);
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.workflow-detail dd,
+.workflow-detail pre {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+
+.workflow-json {
+  max-height: 180px;
+  overflow: auto;
+  padding: 7px 9px;
+  border: 1px solid var(--muse-secondary-line);
+  border-radius: 5px;
+  background: var(--muse-secondary-fill-raised);
+  font: 10px/1.45 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.workflow-status {
+  min-height: 1.2em;
+  margin: 0;
+  color: var(--muse-secondary-muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.workflow-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  padding-top: 9px;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.workflow-choices {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.workflow-choice {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 32px;
+  padding: 6px 8px;
+  border: 1px solid var(--muse-secondary-line);
+  border-radius: 6px;
+  background: var(--muse-secondary-fill-raised);
+}
+
+/* Approval review: a tight scope block followed by an unmistakable action row. */
+.approval-bridge-pane {
+  max-width: 560px;
+  border-color: var(--muse-secondary-line);
+  border-radius: 10px;
+  padding: 14px;
+  color: var(--text, #171717);
+  background: var(--muse-secondary-fill-raised);
+}
+
+.approval-bridge-pane__header {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--muse-secondary-line);
+}
+
+.approval-bridge-pane__header h2 {
+  font-size: 16px;
+}
+
+.approval-bridge-pane__note,
+.approval-bridge-pane__status,
+.approval-bridge-pane__target-status {
+  line-height: 1.45;
+}
+
+.approval-bridge-pane__setup {
+  margin: 10px 0;
+}
+
+.approval-bridge-pane__network {
+  margin: 12px 0;
+  padding-top: 10px;
+  border-top-color: var(--muse-secondary-line);
+}
+
+.approval-bridge-pane__review {
+  gap: 0;
+  margin: 12px 0;
+  border: 1px solid var(--muse-secondary-line);
+  border-radius: 7px;
+  padding: 0 10px;
+  background: var(--muse-secondary-fill);
+}
+
+.approval-bridge-pane__row {
+  grid-template-columns: minmax(86px, 27%) minmax(0, 1fr);
+  gap: 10px;
+  padding: 8px 0;
+  border-top-color: var(--muse-secondary-line);
+}
+
+.approval-bridge-pane__row:first-child {
+  border-top: 0;
+}
+
+.approval-bridge-pane__actions {
+  align-items: center;
+  gap: 7px;
+  padding-top: 10px;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.approval-bridge-pane__actions button {
+  min-height: 34px;
+}
+
+.approval-bridge-pane__actions button:first-child {
+  border-color: var(--accent, var(--text, #171717));
+  color: var(--on-accent, #ffffff);
+  background: var(--accent, var(--text, #171717));
+}
+
+.approval-bridge-pane__actions button:nth-child(2) {
+  border-color: var(--muse-secondary-line-strong);
+  background: var(--muse-secondary-fill);
+}
+
+.approval-bridge-pane__actions button:last-child {
+  margin-left: auto;
+  border-color: transparent;
+  color: var(--muse-secondary-muted);
+  background: transparent;
+}
+
+/* Terminal: keep diagnostics collapsed, with recent run history as the index. */
+.terminal-surface {
+  gap: 12px;
+  margin-top: 12px;
+  border-radius: 9px;
+  padding: 14px;
+  background: var(--muse-secondary-fill-raised);
+}
+
+.terminal-controls {
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--muse-secondary-line);
+  border-radius: 7px;
+  background: var(--muse-secondary-fill);
+}
+
+.terminal-actions {
+  gap: 7px;
+  padding-top: 2px;
+}
+
+.terminal-evidence-list {
+  gap: 0;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.terminal-evidence {
+  gap: 8px;
+  border: 0;
+  border-bottom: 1px solid var(--muse-secondary-line);
+  border-radius: 0;
+  padding: 11px 2px;
+  background: transparent;
+}
+
+.terminal-evidence-top {
+  align-items: baseline;
+}
+
+.terminal-status {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.terminal-evidence-metadata {
+  gap: 6px 14px;
+}
+
+.terminal-raw-details summary {
+  padding: 5px 0;
+  color: var(--muse-secondary-muted);
+}
+
+.terminal-raw-output {
+  border-radius: 6px;
+}
+
+/* Git: file history is a readable list; review/commit/PR remain separate blocks. */
+.git-workspace-body {
+  gap: 10px;
+  margin-top: 14px;
+}
+
+.git-identity-card,
+.git-changes,
+.git-review-card,
+.git-commit-card,
+.git-pr-card {
+  border-radius: 8px;
+  padding: 12px;
+  background: var(--muse-secondary-fill);
+}
+
+.git-file-list {
+  gap: 0;
+  margin-top: 8px;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+.git-file-row {
+  min-height: 34px;
+  border: 0;
+  border-bottom: 1px solid var(--muse-secondary-line);
+  border-radius: 0;
+  padding: 6px 2px;
+  background: transparent;
+}
+
+.git-file-row:hover {
+  border-color: var(--muse-secondary-line);
+  background: color-mix(in srgb, var(--muse-secondary-fill-raised) 70%, transparent);
+}
+
+.git-patch {
+  border-radius: 6px;
+  background: var(--muse-secondary-fill-raised);
+}
+
+/* Topology: nodes get space; relationship rows span the map and keep provenance. */
+#sandbox-topology {
+  display: grid;
+  gap: 9px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid var(--muse-secondary-line);
+}
+
+#sandbox-topology > .aven-capability-topology {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 8px;
+  margin: 0;
+  padding: 2px 0 0;
+}
+
+#sandbox-topology > .aven-capability-topology > li {
+  min-width: 0;
+  min-height: 54px;
+  border: 1px solid var(--muse-secondary-line);
+  border-left: 3px solid var(--muse-secondary-line-strong);
+  border-radius: 7px;
+  padding: 8px 9px;
+  background: var(--muse-secondary-fill);
+}
+
+#sandbox-topology > .aven-capability-topology > li:has(strong) {
+  display: grid;
+  align-content: center;
+  gap: 4px;
+}
+
+#sandbox-topology > .aven-capability-topology > li:has(strong) strong {
+  overflow-wrap: anywhere;
+  font-size: 11px;
+}
+
+#sandbox-topology > .aven-capability-topology > li:has(strong) span {
+  overflow-wrap: anywhere;
+  font-size: 9px;
+}
+
+#sandbox-topology > .aven-capability-topology > li:not(:has(strong)) {
+  grid-column: 1 / -1;
+  min-height: 0;
+  border-top: 0;
+  border-right: 0;
+  border-bottom: 0;
+  border-left: 2px dashed var(--muse-secondary-line-strong);
+  border-radius: 0;
+  padding: 6px 10px;
+  color: var(--muse-secondary-muted);
+  background: transparent;
+  font-size: 10px;
+}
+
+#sandbox-topology > .aven-capability-scope {
+  margin: 0;
+  padding: 0;
+}
+
+/* Preserve visible focus when the row treatment removes card outlines. */
+.aven-workspace-tools-artifact summary:focus-visible,
+.aven-automation-card button:focus-visible,
+.aven-automation-registry-card button:focus-visible,
+.workflow-card button:focus-visible,
+.approval-bridge-pane button:focus-visible,
+.terminal-surface button:focus-visible,
+.git-file-row:focus-within {
+  outline: 2px solid var(--muse-secondary-accent);
+  outline-offset: 2px;
+}
+
+@container (max-width: 560px) {
+  .aven-automation-card,
+  .aven-automation-registry-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aven-automation-card > .aven-automation-body,
+  .aven-automation-card > .aven-automation-meta,
+  .aven-automation-card > .aven-automation-warning,
+  .aven-automation-registry-card > .aven-automation-meta {
+    grid-column: 1;
+  }
+
+  .aven-automation-card > .aven-automation-card-actions {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: flex-start;
+  }
+
+  .aven-automation-registry-card > .aven-automation-plugin-select {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 620px) {
+  .aven-workspace-tools-artifact-details > summary {
+    grid-template-columns: 12px minmax(0, 1fr);
+  }
+
+  .aven-workspace-tools-artifact-details > summary > .aven-workspace-tools-filename {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: left;
+  }
+
+  .workflow-detail,
+  .approval-bridge-pane__row {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .approval-bridge-pane__actions button:last-child {
+    margin-left: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #pane-content * {
+    scroll-behavior: auto;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

@@ -1,0 +1,32 @@
+.intentgraph/capture-profile/
+.intentgraph/runtime/
+node_modules/
+.env
+.env.*
+
+# Local credentials and machine state (never publish)
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+credentials.json
+secrets.json
+auth.json
+*.log
+*.sqlite*
+*.db
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# Generated agent packages, browser captures, and duplicate build snapshots
+/outputs/
+/.intentgraph/baselines/
+/.intentgraph/references/
+/.intentgraph/*-runs/
+/.intentgraph/evidence/
+/.intentgraph/*screenshots/
+/.intentgraph/*.png
+/.intentgraph/code-index.json

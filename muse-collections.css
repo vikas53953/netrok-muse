@@ -1,0 +1,1083 @@
+/*
+ * Netrok Muse collection surfaces
+ *
+ * This layer is deliberately limited to the existing collection and local
+ * file hooks. It gives the same stored records different reading modes:
+ * activity as a timeline, ideas as a backlog, goals as checklists, and
+ * artifacts as an inspectable file index.
+ */
+
+/* Shared collection frame: the center view gets breathing room while the
+ * right hand pane stays dense and scrollable. */
+.aven-workspace-tools,
+.aven-files {
+  min-width: 0;
+  min-height: 0;
+  height: 100%;
+  overflow: auto;
+  color: var(--text);
+  background: var(--bg);
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+.empty-view > .aven-workspace-tools,
+#pane-content > .aven-workspace-tools,
+#pane-content > .aven-files {
+  min-height: 100%;
+}
+
+.aven-workspace-tools-view,
+.aven-files-view {
+  display: grid;
+  width: min(100%, 980px);
+  margin: 0 auto;
+  padding: 30px clamp(18px, 4vw, 48px) 44px;
+  gap: 22px;
+}
+
+#pane-content > .aven-workspace-tools .aven-workspace-tools-view,
+#pane-content > .aven-files .aven-files-view {
+  width: 100%;
+  padding: 18px 16px 28px;
+  gap: 17px;
+}
+
+.aven-workspace-tools-view,
+.aven-files-view,
+.aven-workspace-tools-view *,
+.aven-files-view * {
+  box-sizing: border-box;
+}
+
+.aven-workspace-tools-status,
+.aven-files-status {
+  min-height: 18px;
+  margin: 0;
+  padding: 0 clamp(18px, 4vw, 48px);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+#pane-content > .aven-workspace-tools .aven-workspace-tools-status,
+#pane-content > .aven-files .aven-files-status {
+  padding: 0 16px;
+}
+
+.aven-workspace-tools-header,
+.aven-files-header {
+  align-items: flex-start;
+  gap: 24px;
+  min-width: 0;
+  padding: 0 0 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.aven-workspace-tools-heading,
+.aven-files-heading {
+  min-width: 0;
+}
+
+.aven-workspace-tools-eyebrow,
+.aven-files-eyebrow {
+  margin: 0 0 8px;
+  color: var(--faint);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .14em;
+  line-height: 1.2;
+}
+
+.aven-workspace-tools h2,
+.aven-files h2 {
+  margin: 0;
+  color: var(--text);
+  font-size: clamp(20px, 2.5vw, 28px);
+  font-weight: 650;
+  letter-spacing: -.025em;
+  line-height: 1.12;
+}
+
+.aven-workspace-tools-description,
+.aven-files-description {
+  max-width: 660px;
+  margin: 9px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.aven-workspace-tools-count {
+  flex: none;
+  align-self: flex-start;
+  margin-top: 4px;
+  padding: 5px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--muted);
+  background: var(--surface-2);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools-toolbar,
+.aven-workspace-tools-card-actions,
+.aven-workspace-tools-form-actions,
+.aven-files-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aven-workspace-tools-toolbar {
+  justify-content: flex-end;
+  margin-top: -5px;
+}
+
+.aven-workspace-tools button,
+.aven-files button {
+  min-height: 32px;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  padding: 7px 11px;
+  color: var(--text);
+  background: var(--surface-2);
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.25;
+  cursor: pointer;
+}
+
+.aven-workspace-tools button:hover:not(:disabled),
+.aven-workspace-tools button:focus-visible,
+.aven-files button:hover:not(:disabled),
+.aven-files button:focus-visible {
+  border-color: var(--accent);
+  background: var(--surface-3);
+}
+
+.aven-workspace-tools button:focus-visible,
+.aven-workspace-tools input:focus-visible,
+.aven-workspace-tools textarea:focus-visible,
+.aven-files button:focus-visible,
+.aven-files textarea:focus-visible,
+.aven-files summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+
+.aven-workspace-tools button:disabled,
+.aven-files button:disabled {
+  cursor: default;
+  opacity: .48;
+}
+
+.aven-workspace-tools .button-primary,
+.aven-files .button-primary {
+  border-color: var(--accent);
+  color: var(--on-accent);
+  background: var(--accent);
+  font-weight: 650;
+}
+
+.aven-workspace-tools .button-primary:hover:not(:disabled),
+.aven-workspace-tools .button-primary:focus-visible,
+.aven-files .button-primary:hover:not(:disabled),
+.aven-files .button-primary:focus-visible {
+  border-color: var(--accent);
+  color: var(--on-accent);
+  background: var(--accent);
+  filter: brightness(.9);
+}
+
+.aven-workspace-tools .button-quiet,
+.aven-files .button-quiet {
+  border-color: transparent;
+  color: var(--muted);
+  background: transparent;
+}
+
+.aven-workspace-tools h3,
+.aven-workspace-tools h4,
+.aven-files h3,
+.aven-files h4 {
+  min-width: 0;
+  color: var(--text);
+}
+
+.aven-workspace-tools h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.35;
+  overflow-wrap: anywhere;
+}
+
+.aven-workspace-tools h4,
+.aven-files h4 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .1em;
+  line-height: 1.25;
+  text-transform: uppercase;
+}
+
+.aven-workspace-tools-card-top,
+.aven-workspace-tools-subhead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 0;
+}
+
+.aven-workspace-tools-card-top h3 {
+  min-width: 0;
+}
+
+.aven-workspace-tools-badge {
+  flex: none;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 4px 8px;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools-badge.is-muted {
+  color: var(--muted);
+}
+
+.aven-workspace-tools-badge.is-success {
+  border-color: var(--success);
+  color: var(--success);
+}
+
+.aven-workspace-tools-badge.is-danger,
+.aven-workspace-tools-warning {
+  color: var(--danger);
+}
+
+.aven-workspace-tools-meta,
+.aven-workspace-tools-scope,
+.aven-workspace-tools-help,
+.aven-workspace-tools-warning,
+.aven-workspace-tools-empty {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
+.aven-workspace-tools-empty {
+  padding: 22px 0;
+  border-top: 1px dashed var(--border-strong);
+  border-bottom: 1px dashed var(--border-strong);
+  color: var(--muted);
+}
+
+/* Feed: a readable activity timeline with the saved timestamp kept at the
+ * right edge of each row. */
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-list {
+  position: relative;
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  margin-left: 9px;
+  padding-left: 26px;
+  border-left: 1px solid var(--border-strong);
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 7px 18px;
+  min-width: 0;
+  padding: 17px 4px 18px 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item::before {
+  position: absolute;
+  top: 21px;
+  left: -31px;
+  width: 9px;
+  height: 9px;
+  border: 2px solid var(--bg);
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px var(--border-strong);
+  content: "";
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item:hover {
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-top,
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-body {
+  grid-column: 1 / -1;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-top {
+  align-items: baseline;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-top time {
+  flex: none;
+  color: var(--faint);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-body {
+  max-width: 76ch;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-meta {
+  grid-column: 1;
+  align-self: center;
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-actions {
+  grid-column: 2;
+  grid-row: 3;
+  justify-content: flex-end;
+  align-self: center;
+}
+
+.aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-actions button {
+  border-color: transparent;
+  padding-inline: 4px;
+  color: var(--muted);
+  background: transparent;
+}
+
+/* Ideas: dense backlog rows expose the title, notes, freshness, and actions
+ * in one scan. The number is generated from the actual DOM order. */
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-toolbar {
+  margin-top: -7px;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-list {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  border-top: 1px solid var(--border);
+  counter-reset: idea-row;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-list.is-archived {
+  margin-top: 14px;
+  counter-reset: archived-row;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card {
+  position: relative;
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  gap: 6px 13px;
+  min-width: 0;
+  padding: 15px 2px 16px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+  counter-increment: idea-row;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-list.is-archived .aven-workspace-tools-card {
+  counter-increment: archived-row;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card::before {
+  grid-column: 1;
+  grid-row: 1 / span 3;
+  align-self: start;
+  padding-top: 2px;
+  color: var(--faint);
+  content: counter(idea-row, decimal-leading-zero);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-list.is-archived .aven-workspace-tools-card::before {
+  content: counter(archived-row, decimal-leading-zero);
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card:hover {
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-top,
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-body {
+  grid-column: 2 / -1;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-top {
+  align-items: baseline;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-body {
+  max-width: 72ch;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-meta {
+  grid-column: 2;
+  align-self: center;
+  font-size: 10px;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-actions {
+  grid-column: 3;
+  grid-row: 3;
+  justify-content: flex-end;
+  align-self: center;
+}
+
+.aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-actions button {
+  min-height: 32px;
+}
+
+/* Goals: actual records become spacious progress cards. The progress copy is
+ * retained as the source of truth and the checklist rows stay individually
+ * operable. */
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  min-width: 0;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-section-title {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: var(--faint);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .11em;
+  line-height: 1.2;
+  text-transform: uppercase;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-empty {
+  grid-column: 1 / -1;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-card {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  padding: 17px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-card:hover {
+  border-color: var(--border-strong);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-card-top {
+  align-items: baseline;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-meta {
+  padding: 9px 0 0;
+  border-top: 1px solid var(--border);
+  color: var(--text);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-checklist {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--border);
+  list-style: none;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-check-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 9px;
+  min-width: 0;
+  min-height: 38px;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-check-row input {
+  flex: none;
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: var(--accent);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-check-row label {
+  min-width: 0;
+  flex: 1;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.4;
+  overflow-wrap: anywhere;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-check-row input:checked + label {
+  color: var(--muted);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-check-row .button-quiet {
+  min-height: 24px;
+  margin: -3px 0;
+  padding: 4px 3px;
+  font-size: 10px;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-warning {
+  padding: 8px 10px;
+  border-left: 2px solid var(--danger);
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-card-actions {
+  padding-top: 1px;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-evidence-picker {
+  display: grid;
+  gap: 12px;
+  min-width: 0;
+  padding: 15px;
+  border: 1px solid var(--border-strong);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-evidence-list {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+  max-height: 320px;
+  overflow: auto;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-evidence-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-evidence-copy {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  gap: 3px;
+}
+
+.aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-evidence-copy span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Artifacts: the filename is the stable identity; operation and target stay
+ * in the companion column. Expanded raw output and provenance remain intact. */
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-scope {
+  padding: 8px 10px;
+  border-left: 2px solid var(--accent);
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-list {
+  display: grid;
+  gap: 0;
+  min-width: 0;
+  border-top: 1px solid var(--border);
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact {
+  display: block;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  background: transparent;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr) minmax(132px, 38%);
+  gap: 11px;
+  align-items: center;
+  min-width: 0;
+  min-height: 54px;
+  padding: 10px 4px;
+  color: var(--text);
+  cursor: pointer;
+  list-style: none;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary::-webkit-details-marker {
+  width: 0;
+  height: 0;
+  opacity: 0;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary::before {
+  width: 14px;
+  color: var(--faint);
+  content: "›";
+  font-size: 18px;
+  line-height: 1;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details[open] > summary {
+  background: var(--surface-2);
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details[open] > summary::before {
+  content: "⌄";
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary > strong {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 500;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary > .aven-workspace-tools-filename {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--text);
+  font: 11px/1.35 ui-monospace, SFMono-Regular, Consolas, monospace;
+  text-align: right;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary > .aven-workspace-tools-filename::before {
+  margin-right: 7px;
+  color: var(--accent);
+  content: "▱";
+  font-family: inherit;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > .aven-workspace-tools-card-top,
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > .aven-workspace-tools-raw,
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > .aven-workspace-tools-provenance {
+  margin-right: 4px;
+  margin-left: 25px;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > .aven-workspace-tools-card-top {
+  align-items: baseline;
+  padding: 12px 0 9px;
+  border-top: 1px solid var(--border);
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact .aven-workspace-tools-raw {
+  max-height: 360px;
+  margin-top: 0;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--surface);
+  font: 11px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact .aven-workspace-tools-provenance {
+  display: grid;
+  grid-template-columns: minmax(72px, auto) minmax(0, 1fr);
+  gap: 5px 12px;
+  min-width: 0;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  padding-top: 11px;
+  border-top: 1px solid var(--border);
+  font-size: 10px;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-provenance dt {
+  color: var(--muted);
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-provenance dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact > .button-secondary,
+.aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact > .aven-generated-file-preview {
+  margin-left: 25px;
+  margin-bottom: 12px;
+}
+
+/* Local files: preserve the real directory listing while giving the editor
+ * and before/after review equal visual weight. */
+.aven-files-header {
+  display: flex;
+}
+
+.aven-files h2 {
+  font-size: clamp(19px, 2.2vw, 25px);
+}
+
+.aven-files-description,
+.aven-files-help,
+.aven-files-empty,
+.aven-files-review-path,
+.aven-files-entry-meta {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.aven-files-header > .button-primary {
+  flex: none;
+  align-self: flex-start;
+}
+
+.aven-files-breadcrumbs {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  min-width: 0;
+  padding: 7px 8px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.aven-files-breadcrumb {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-files-breadcrumb:disabled:not(.aven-files-up) {
+  border-color: transparent;
+  color: var(--text);
+  background: transparent;
+  opacity: 1;
+}
+
+.aven-files-breadcrumb-separator {
+  color: var(--faint);
+  font-size: 11px;
+}
+
+.aven-files-up {
+  margin-left: auto;
+}
+
+.aven-files-directory-section,
+.aven-files-editor,
+.aven-files-review {
+  display: grid;
+  gap: 11px;
+  min-width: 0;
+}
+
+.aven-files-directory-section > h3 {
+  padding-bottom: 7px;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+}
+
+.aven-files-list {
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+}
+
+.aven-files-entry {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  padding: 4px 7px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  background: var(--surface-2);
+}
+
+.aven-files-entry::before {
+  color: var(--faint);
+  content: "▱";
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+}
+
+.aven-files-entry.is-directory::before {
+  color: var(--accent);
+  content: "▰";
+  font-size: 11px;
+}
+
+.aven-files-entry-button {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  border-color: transparent !important;
+  padding-inline: 3px !important;
+  background: transparent !important;
+  text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-files-entry-button:hover:not(:disabled),
+.aven-files-entry-button:focus-visible {
+  background: var(--surface-3) !important;
+}
+
+.aven-files-entry-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.aven-files-entry-meta {
+  flex: none;
+  color: var(--faint);
+  font-size: 10px;
+  white-space: nowrap;
+}
+
+.aven-files-editor,
+.aven-files-review {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.aven-files-editor > h3,
+.aven-files-review > h3 {
+  font-size: 13px;
+}
+
+.aven-files-editor textarea {
+  width: 100%;
+  min-width: 0;
+  min-height: clamp(250px, 36vh, 470px);
+  resize: vertical;
+  border: 1px solid var(--border-strong);
+  border-radius: 7px;
+  padding: 13px;
+  color: var(--text);
+  background: var(--bg);
+  font: 12px/1.6 ui-monospace, SFMono-Regular, Consolas, monospace;
+  tab-size: 2;
+  white-space: pre;
+}
+
+.aven-files-actions {
+  justify-content: flex-end;
+}
+
+.aven-files-review-slot {
+  min-width: 0;
+}
+
+.aven-files-compare {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  min-width: 0;
+}
+
+.aven-files-compare-pane {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.aven-files-compare-pane pre {
+  min-width: 0;
+  min-height: 190px;
+  max-height: 520px;
+  margin: 0;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 12px;
+  color: var(--text);
+  background: var(--bg);
+  font: 11px/1.55 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+/* The pane is a real narrow surface, even when it is rendered as a modal at
+ * smaller viewport widths. Container queries keep collection cards legible
+ * without changing DOM order. */
+@container (max-width: 700px) {
+  #pane-content > .aven-workspace-tools .aven-workspace-tools-view,
+  #pane-content > .aven-files .aven-files-view {
+    padding-inline: 14px;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary {
+    grid-template-columns: 14px minmax(0, 1fr);
+  }
+
+  .aven-workspace-tools[data-workspace-tool="artifacts"] .aven-workspace-tools-artifact-details > summary > .aven-workspace-tools-filename {
+    grid-column: 2;
+    grid-row: 2;
+    text-align: left;
+  }
+
+  .aven-files-compare {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 760px) {
+  .aven-workspace-tools-view,
+  .aven-files-view {
+    padding: 24px 18px 32px;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 540px) {
+  .aven-workspace-tools-view,
+  .aven-files-view {
+    padding: 18px 13px 26px;
+    gap: 16px;
+  }
+
+  .aven-workspace-tools-header,
+  .aven-files-header {
+    flex-direction: column;
+    gap: 13px;
+  }
+
+  .aven-workspace-tools-count,
+  .aven-files-header > .button-primary {
+    align-self: flex-start;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-list {
+    margin-left: 5px;
+    padding-left: 19px;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 7px;
+    padding-right: 0;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item::before {
+    left: -24px;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-meta,
+  .aven-workspace-tools[data-workspace-tool="feed"] .aven-workspace-tools-feed-item .aven-workspace-tools-card-actions {
+    grid-column: 1;
+    grid-row: auto;
+    justify-content: flex-start;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card {
+    grid-template-columns: 25px minmax(0, 1fr);
+    gap: 6px 9px;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-top,
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-body,
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-meta,
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-actions {
+    grid-column: 2;
+    grid-row: auto;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="ideas"] .aven-workspace-tools-card-actions {
+    justify-content: flex-start;
+  }
+
+  .aven-workspace-tools[data-workspace-tool="goals"] .aven-workspace-tools-card,
+  .aven-files-editor,
+  .aven-files-review {
+    padding: 13px;
+  }
+
+  .aven-files-entry-meta {
+    max-width: 8ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aven-workspace-tools *,
+  .aven-files * {
+    scroll-behavior: auto;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

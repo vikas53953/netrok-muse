@@ -1,0 +1,7 @@
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = "Public localStorage key names; these identify browser records, not credentials"
+regexTarget = "secret"
+regexes = ['''^aven-(wireframe-conversations-v1|polished-(preferences-v1|chats-v1|docs-v1|p1-raw-backup-v1|direct-teams-migration-v4|direct-teams-raw-backup-v1|local-reactions-raw-backup-v1|local-reactions-v1))$''']

@@ -1,0 +1,1353 @@
+/*
+ * Netrok Muse operations surfaces.
+ *
+ * This file is loaded after the existing surface styles. It only changes the
+ * presentation of the operational modules below; it does not create state,
+ * change markup, or own the application shell.
+ */
+
+/* Shared module rules: controls remain usable when a pane is narrow. */
+.aven-automation-view,
+.workflow-card,
+.approval-bridge-pane,
+.terminal-surface,
+.git-settings,
+#sandbox-topology,
+.aven-capability-session {
+  box-sizing: border-box;
+}
+
+.aven-automation-view *,
+.workflow-card *,
+.approval-bridge-pane *,
+.terminal-surface *,
+.git-settings *,
+#sandbox-topology *,
+.aven-capability-session * {
+  box-sizing: border-box;
+}
+
+.aven-automation-view button,
+.aven-automation-view input,
+.aven-automation-view select,
+.workflow-card button,
+.workflow-card input,
+.workflow-card textarea,
+.approval-bridge-pane button,
+.approval-bridge-pane input,
+.approval-bridge-pane select,
+.terminal-surface button,
+.terminal-surface select,
+.git-settings button,
+.git-settings input,
+.git-settings textarea,
+.aven-capability-session button {
+  min-height: 32px;
+}
+
+.aven-automation-view button:focus-visible,
+.aven-automation-view input:focus-visible,
+.aven-automation-view select:focus-visible,
+.workflow-card button:focus-visible,
+.workflow-card input:focus-visible,
+.workflow-card textarea:focus-visible,
+.approval-bridge-pane button:focus-visible,
+.approval-bridge-pane input:focus-visible,
+.approval-bridge-pane select:focus-visible,
+.terminal-surface button:focus-visible,
+.terminal-surface select:focus-visible,
+.git-settings button:focus-visible,
+.git-settings input:focus-visible,
+.git-settings textarea:focus-visible,
+.git-settings .git-patch:focus-visible,
+.aven-capability-session button:focus-visible,
+#sandbox-topology a:focus-visible {
+  outline: 2px solid var(--focus, var(--accent, var(--text)));
+  outline-offset: 2px;
+}
+
+/* Schedules, automation history, plugins, and workflow registry. */
+.aven-automation-view {
+  padding: 28px clamp(18px, 3vw, 34px) 42px;
+  background: var(--surface, var(--bg));
+}
+
+.aven-automation-header {
+  align-items: end;
+  gap: 24px;
+  border-bottom: 1px solid var(--border-strong, var(--border));
+  padding-bottom: 18px;
+}
+
+.aven-automation-eyebrow,
+.aven-automation-section > h3,
+.aven-automation-section-header h3 {
+  color: var(--accent, var(--text));
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.aven-automation-header h2 {
+  max-width: 18ch;
+  color: var(--text);
+  font-size: clamp(26px, 3.2vw, 34px);
+  font-weight: 650;
+  letter-spacing: -.035em;
+  line-height: 1.04;
+}
+
+.aven-automation-description {
+  max-width: 56ch;
+  margin-top: 10px;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.65;
+}
+
+.aven-automation-count {
+  padding: 6px 9px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 999px;
+  color: var(--text);
+  background: var(--surface-2);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.aven-automation-status {
+  min-height: 24px;
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
+.aven-automation-toolbar {
+  justify-content: space-between;
+  margin: 20px 0 6px;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.aven-automation-section {
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.aven-automation-section > h3,
+.aven-automation-section-header h3 {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+  letter-spacing: .12em;
+}
+
+.aven-automation-card,
+.aven-automation-form,
+.aven-automation-registry-card,
+.aven-automation-alert {
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  padding: 0;
+  overflow: hidden;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.aven-automation-card-top,
+.aven-automation-registry-card .aven-automation-card-top,
+.aven-automation-alert .aven-automation-card-top {
+  align-items: center;
+  padding: 15px 16px 13px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-3);
+}
+
+.aven-automation-card-top h3,
+.aven-automation-registry-card h4 {
+  font-size: 14px;
+  font-weight: 650;
+  letter-spacing: -.015em;
+}
+
+.aven-automation-badge {
+  border-color: var(--border-strong, var(--border));
+  padding: 4px 8px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.aven-automation-badge.is-enabled {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.aven-automation-card > .aven-automation-body,
+.aven-automation-card > .aven-automation-meta,
+.aven-automation-card > .aven-automation-warning,
+.aven-automation-registry-card > .aven-automation-body,
+.aven-automation-registry-card > .aven-automation-meta,
+.aven-automation-registry-card > .aven-automation-plugin-select,
+.aven-automation-alert > .aven-automation-body,
+.aven-automation-alert > .aven-automation-meta {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+.aven-automation-card > .aven-automation-body,
+.aven-automation-registry-card > .aven-automation-body {
+  margin-top: 15px;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.aven-automation-meta {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.aven-automation-meta:last-of-type {
+  border-bottom: 0;
+}
+
+.aven-automation-warning {
+  margin-top: 8px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--accent);
+  color: var(--text);
+  background: var(--surface-3);
+  font-size: 11px;
+}
+
+.aven-automation-card-actions,
+.aven-automation-form-actions {
+  margin-top: 8px;
+  padding: 12px 16px 14px;
+  border-top: 1px solid var(--border-strong, var(--border));
+  background: var(--surface-3);
+}
+
+.aven-automation-card-actions {
+  justify-content: flex-end;
+}
+
+.aven-automation-card-actions button,
+.aven-automation-form-actions button {
+  min-width: 82px;
+  border-radius: 7px;
+  font-weight: 600;
+}
+
+.aven-automation-card-actions .button-primary,
+.aven-automation-form-actions .button-primary {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 50%, transparent);
+}
+
+.aven-automation-history {
+  margin: 0 16px;
+  padding: 10px 0;
+  border-top: 1px dashed var(--border-strong, var(--border));
+}
+
+.aven-automation-history-row {
+  padding: 5px 0;
+  color: var(--muted);
+}
+
+.aven-automation-form {
+  gap: 16px;
+  padding-top: 16px;
+}
+
+.aven-automation-form > h3,
+.aven-automation-form > .aven-automation-help,
+.aven-automation-form > .aven-automation-form-grid,
+.aven-automation-form > .aven-automation-form-status {
+  margin-right: 16px;
+  margin-left: 16px;
+}
+
+.aven-automation-form > h3 {
+  font-size: 16px;
+}
+
+.aven-automation-form-grid {
+  gap: 14px;
+}
+
+.aven-automation-label {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+}
+
+.aven-automation-view input[type="text"],
+.aven-automation-view input[type="time"],
+.aven-automation-view select {
+  min-height: 36px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.aven-automation-registry-list,
+.aven-automation-alert-list {
+  gap: 12px;
+}
+
+.aven-automation-registry-card > .aven-automation-meta {
+  display: grid;
+  grid-template-columns: minmax(110px, .38fr) minmax(0, 1fr);
+  gap: 12px;
+}
+
+.aven-automation-registry-card > .aven-automation-meta::first-line {
+  color: var(--faint);
+}
+
+.aven-automation-plugin-select {
+  justify-content: flex-end;
+  margin-top: 2px;
+  padding: 10px 0 14px;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.aven-automation-plugin-select input,
+.aven-automation-toggle input {
+  width: 18px;
+  height: 18px;
+}
+
+.aven-automation-alert {
+  border-left: 3px solid var(--accent);
+}
+
+.aven-automation-alert.is-read {
+  border-left-color: var(--border-strong, var(--border));
+}
+
+/* Clarification, proposal, and approval cards. */
+.workflow-card {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 14px;
+  padding: 20px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.workflow-card .workflow-kicker {
+  margin: 0;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.workflow-card > h3 {
+  margin: 0;
+  font-size: clamp(18px, 2vw, 23px);
+  font-weight: 650;
+  letter-spacing: -.025em;
+  line-height: 1.15;
+}
+
+.workflow-card > p,
+.workflow-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.workflow-question-form,
+.workflow-review {
+  display: grid;
+  gap: 11px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.workflow-question-form > label,
+.workflow-free-text {
+  display: grid;
+  gap: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.workflow-choices {
+  display: grid;
+  gap: 7px;
+}
+
+.workflow-choice {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  min-height: 36px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.workflow-choice:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.workflow-free-text textarea {
+  min-height: 72px;
+  width: 100%;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 7px;
+  padding: 9px 10px;
+  color: var(--text);
+  background: var(--surface-2);
+  font: inherit;
+  resize: vertical;
+}
+
+.workflow-review {
+  border-color: var(--border-strong, var(--border));
+  background: var(--surface-3);
+}
+
+.workflow-review h4 {
+  margin: 0;
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.workflow-details {
+  display: grid;
+  gap: 0;
+  margin: 0;
+}
+
+.workflow-detail {
+  display: grid;
+  grid-template-columns: minmax(105px, .38fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--border);
+}
+
+.workflow-detail dt {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+}
+
+.workflow-detail dd {
+  min-width: 0;
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.workflow-json {
+  max-height: 180px;
+  margin: 0;
+  overflow: auto;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--bg);
+  font: 10px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+  white-space: pre-wrap;
+}
+
+.workflow-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0 -20px -20px;
+  padding: 13px 20px 15px;
+  border-top: 1px solid var(--border-strong, var(--border));
+  background: var(--surface-3);
+}
+
+.workflow-actions button {
+  min-width: 96px;
+  border-radius: 7px;
+  font-weight: 650;
+}
+
+/* Adapter review and approval bridge: target and action remain visible. */
+.approval-bridge-pane {
+  max-width: none;
+  padding: 24px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 16px;
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.approval-bridge-pane__header {
+  display: grid;
+  gap: 7px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--border-strong, var(--border));
+}
+
+.approval-bridge-pane__eyebrow {
+  color: var(--accent);
+  font-weight: 750;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.approval-bridge-pane__header h2 {
+  font-size: clamp(22px, 2.4vw, 29px);
+  font-weight: 650;
+  letter-spacing: -.03em;
+}
+
+.approval-bridge-pane__note,
+.approval-bridge-pane__status,
+.approval-bridge-pane__target-status {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.approval-bridge-pane__setup {
+  gap: 10px;
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.approval-bridge-pane__setup input,
+.approval-bridge-pane__setup select,
+.approval-bridge-pane__setup button,
+.approval-bridge-pane__network > select,
+.approval-bridge-pane__network > button {
+  min-height: 36px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.approval-bridge-pane__network {
+  margin: 20px 0;
+  padding: 16px 0;
+  border-top: 1px solid var(--border-strong, var(--border));
+  border-bottom: 1px solid var(--border-strong, var(--border));
+}
+
+.approval-bridge-pane__network h3 {
+  margin-bottom: 7px;
+  font-size: 15px;
+}
+
+.approval-bridge-pane__network-review {
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.approval-bridge-pane__review {
+  gap: 0;
+  margin: 20px 0;
+  padding: 14px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.approval-bridge-pane__row {
+  grid-template-columns: minmax(100px, .34fr) minmax(0, 1fr);
+  gap: 16px;
+  min-height: 36px;
+  align-items: start;
+  padding: 10px 0;
+  border-top-color: var(--border);
+}
+
+.approval-bridge-pane__row:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.approval-bridge-pane__row dt {
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 750;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.approval-bridge-pane__row dd {
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.approval-bridge-pane__actions {
+  justify-content: flex-end;
+  margin: 0 -24px -24px;
+  padding: 14px 24px 16px;
+  border-top: 1px solid var(--border-strong, var(--border));
+  background: var(--surface-3);
+}
+
+.approval-bridge-pane__actions button {
+  min-width: 126px;
+  min-height: 36px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface-2);
+  font-weight: 650;
+}
+
+.approval-bridge-pane__actions button:first-child {
+  border-color: var(--accent);
+  color: var(--on-accent, var(--bg));
+  background: var(--accent);
+}
+
+/* Read-only terminal: capabilities, controls, and recent evidence are distinct. */
+.terminal-surface {
+  gap: 18px;
+  margin-top: 20px;
+  padding: 22px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 16px;
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: 0 12px 28px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.terminal-heading {
+  gap: 7px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border-strong, var(--border));
+}
+
+.terminal-heading h2 {
+  font-size: clamp(22px, 2.4vw, 29px);
+  font-weight: 650;
+  letter-spacing: -.03em;
+}
+
+.terminal-subtitle,
+.terminal-status-message,
+.terminal-control,
+.terminal-capability dt,
+.terminal-field dt,
+.terminal-output-note {
+  color: var(--muted);
+}
+
+.terminal-capabilities {
+  gap: 0;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-capability {
+  min-height: 48px;
+  padding: 8px 14px;
+  border-left: 1px solid var(--border);
+}
+
+.terminal-capability:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.terminal-capability dd,
+.terminal-field dd {
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.terminal-controls {
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--surface);
+}
+
+.terminal-control select {
+  min-height: 36px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 7px;
+  padding: 8px 10px;
+  color: var(--text);
+  background: var(--surface-2);
+}
+
+.terminal-actions {
+  align-items: center;
+}
+
+.terminal-actions button,
+.terminal-copy {
+  min-height: 36px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface-2);
+  font-weight: 650;
+}
+
+.terminal-actions button:first-child {
+  border-color: var(--accent);
+  color: var(--on-accent, var(--bg));
+  background: var(--accent);
+}
+
+.terminal-evidence-list {
+  gap: 12px;
+  padding-top: 4px;
+}
+
+.terminal-evidence-title {
+  font-size: 11px;
+  font-weight: 750;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+
+.terminal-evidence {
+  gap: 12px;
+  padding: 15px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.terminal-evidence-top {
+  padding-bottom: 9px;
+  border-bottom: 1px solid var(--border);
+}
+
+.terminal-status {
+  font-weight: 750;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.terminal-status-success { color: var(--accent); }
+.terminal-status-failure,
+.terminal-status-unknown { color: var(--text); }
+
+.terminal-evidence-metadata {
+  gap: 0;
+}
+
+.terminal-field {
+  min-height: 44px;
+  padding: 7px 10px;
+  border-left: 1px solid var(--border);
+}
+
+.terminal-field:first-child {
+  padding-left: 0;
+  border-left: 0;
+}
+
+.terminal-raw-details {
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--border-strong, var(--border));
+}
+
+.terminal-raw-details summary {
+  min-height: 32px;
+  color: var(--muted);
+  font-weight: 650;
+}
+
+.terminal-raw-output {
+  border-color: var(--border-strong, var(--border));
+  background: var(--bg);
+}
+
+/* Git workspace: repository target, change set, review, and write actions. */
+.git-settings {
+  max-width: none;
+  color: var(--text);
+}
+
+.git-settings-header {
+  padding-bottom: 17px;
+  border-bottom: 1px solid var(--border-strong, var(--border));
+}
+
+.git-settings-header h2 {
+  margin: 0 0 8px;
+  font-size: clamp(24px, 2.8vw, 32px);
+  font-weight: 650;
+  letter-spacing: -.035em;
+}
+
+.git-settings-header p,
+.git-settings-help,
+.git-review-description {
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.git-repository-form {
+  gap: 12px;
+  margin-top: 18px;
+  padding: 14px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 10px;
+  background: var(--surface-2);
+}
+
+.git-repository-form input,
+.git-commit-card textarea,
+.git-pr-fields input,
+.git-pr-fields textarea {
+  min-height: 36px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.git-workspace-body {
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.git-identity-card,
+.git-changes,
+.git-review-card,
+.git-commit-card,
+.git-pr-card {
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  padding: 17px;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.git-identity-card h3,
+.git-changes h3,
+.git-review-card h3,
+.git-commit-card h3,
+.git-pr-card h3 {
+  font-size: 15px;
+  font-weight: 650;
+}
+
+.git-identity-value {
+  margin-top: 9px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  color: var(--text);
+  background: var(--surface);
+  font: 11px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+}
+
+.git-section-heading {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+
+.git-selection-count {
+  color: var(--accent);
+  font-weight: 650;
+}
+
+.git-select-all {
+  min-height: 32px;
+  margin: 12px 0 8px;
+}
+
+.git-file-list {
+  gap: 6px;
+}
+
+.git-file-row {
+  min-height: 40px;
+  padding: 8px 10px;
+  border-color: var(--border);
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.git-file-row:has(input:checked) {
+  border-color: var(--accent);
+  box-shadow: inset 3px 0 var(--accent);
+}
+
+.git-actions {
+  margin-top: 15px;
+  padding-top: 13px;
+  border-top: 1px solid var(--border-strong, var(--border));
+}
+
+.git-actions button {
+  min-width: 96px;
+  border-radius: 7px;
+  font-weight: 650;
+}
+
+.git-patch {
+  max-height: 320px;
+  margin-top: 12px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 7px;
+  background: var(--bg);
+}
+
+/* Network inventory and topology evidence. */
+#pane-content > .preview-card,
+#sandbox-terminal {
+  margin-right: clamp(16px, 3vw, 34px);
+  margin-left: clamp(16px, 3vw, 34px);
+}
+
+#pane-content > .preview-card {
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  padding: 20px;
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+#pane-content > .preview-card h3,
+.sandbox-device h3 {
+  font-size: 18px;
+  font-weight: 650;
+  letter-spacing: -.02em;
+}
+
+#pane-content > .preview-card .button-primary {
+  min-height: 36px;
+  margin-top: 12px;
+  border-radius: 7px;
+  font-weight: 650;
+}
+
+.sandbox-device {
+  display: grid;
+  gap: 12px;
+  border-color: var(--border-strong, var(--border));
+  border-radius: 12px;
+  padding: 15px;
+  background: var(--surface-2);
+}
+
+.sandbox-device h3 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.sandbox-device dl {
+  display: grid;
+  grid-template-columns: minmax(100px, .4fr) minmax(0, 1fr);
+  gap: 0;
+  margin: 0;
+}
+
+.sandbox-device dt,
+.sandbox-device dd {
+  padding: 8px 0;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.sandbox-device dt {
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.sandbox-device dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+}
+
+#sandbox-topology {
+  display: grid;
+  gap: 14px;
+  margin: 24px clamp(16px, 3vw, 34px) 34px;
+  padding: 18px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  background: var(--surface-2);
+}
+
+#sandbox-topology > h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+#sandbox-topology > .aven-capability-scope {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.aven-capability-topology {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.aven-capability-topology li {
+  min-width: 0;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  color: var(--muted);
+  background: var(--surface);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.aven-capability-topology li:has(strong) {
+  display: grid;
+  gap: 5px;
+  border-color: var(--border-strong, var(--border));
+  color: var(--text);
+  background: var(--surface-3);
+}
+
+.aven-capability-topology li strong {
+  overflow-wrap: anywhere;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.aven-capability-topology li.is-unavailable {
+  border-style: dashed;
+  color: var(--muted);
+}
+
+.aven-capability-topology li.is-inferred {
+  grid-column: 1 / -1;
+  border-style: dashed;
+  color: var(--faint);
+  background: var(--surface-2);
+}
+
+/* Capability panes: connection state and provenance remain explicit. */
+.aven-capability-session {
+  display: grid;
+  gap: 14px;
+  margin: 0 0 14px;
+  padding: 18px;
+  border: 1px solid var(--border-strong, var(--border));
+  border-radius: 14px;
+  color: var(--text);
+  background: var(--surface-2);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--bg) 65%, transparent);
+}
+
+.aven-capability-session[data-session-status="connected"] {
+  border-top: 3px solid var(--accent);
+}
+
+.aven-capability-session[data-session-status="unavailable"] {
+  border-top: 3px dashed var(--border-strong, var(--border));
+}
+
+.aven-capability-session h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 650;
+}
+
+.aven-capability-session > p,
+.aven-capability-scope,
+.aven-capability-provenance dt {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.aven-capability-session-actions {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--border-strong, var(--border));
+}
+
+.aven-capability-session-actions button {
+  min-width: 96px;
+  border-radius: 7px;
+  font-weight: 650;
+}
+
+.aven-capability-generated-list,
+.aven-capability-comparison {
+  display: grid;
+  gap: 10px;
+}
+
+.aven-capability-generated-card,
+.aven-capability-comparison article {
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.aven-capability-generated-card strong,
+.aven-capability-comparison h4 {
+  color: var(--text);
+  font-size: 12px;
+}
+
+.aven-capability-provenance {
+  display: grid;
+  grid-template-columns: minmax(100px, .38fr) minmax(0, 1fr);
+  gap: 0;
+  margin: 0;
+  padding: 10px 0;
+  border-top: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+}
+
+.aven-capability-provenance > dt,
+.aven-capability-provenance > dd {
+  min-width: 0;
+  padding: 7px 10px;
+  border-top: 1px solid var(--border);
+}
+
+.aven-capability-provenance > dt:first-child,
+.aven-capability-provenance > dd:first-of-type {
+  padding-left: 0;
+  border-top: 0;
+}
+
+.aven-capability-provenance dd {
+  margin: 3px 0 0;
+  overflow-wrap: anywhere;
+  color: var(--text);
+  font-size: 11px;
+}
+
+/* Compact pane widths: preserve hierarchy and 32px targets at both cutovers. */
+@media (max-width: 760px) {
+  .aven-automation-view {
+    padding: 22px 16px 32px;
+  }
+
+  .aven-automation-header {
+    align-items: start;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .aven-automation-header h2 {
+    max-width: none;
+  }
+
+  .aven-automation-toolbar {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .aven-automation-toolbar button {
+    width: 100%;
+  }
+
+  .aven-automation-registry-card > .aven-automation-meta {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .workflow-card {
+    padding: 16px;
+  }
+
+  .workflow-actions {
+    margin-right: -16px;
+    margin-bottom: -16px;
+    margin-left: -16px;
+    padding-right: 16px;
+    padding-left: 16px;
+  }
+
+  .approval-bridge-pane {
+    padding: 18px;
+  }
+
+  .approval-bridge-pane__actions {
+    margin-right: -18px;
+    margin-bottom: -18px;
+    margin-left: -18px;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .terminal-surface {
+    padding: 18px;
+  }
+
+  .terminal-capabilities,
+  .terminal-evidence-metadata,
+  .terminal-controls,
+  .aven-capability-provenance {
+    grid-template-columns: 1fr;
+  }
+
+  .terminal-capability,
+  .terminal-field,
+  .aven-capability-provenance > dt,
+  .aven-capability-provenance > dd {
+    padding: 8px 0;
+    border-top: 1px solid var(--border);
+  }
+
+  .terminal-capability:first-child,
+  .terminal-field:first-child,
+  .aven-capability-provenance > dt:first-child,
+  .aven-capability-provenance > dd:first-of-type {
+    padding-top: 0;
+    border-top: 0;
+  }
+
+  .git-repository-form {
+    grid-template-columns: 1fr;
+  }
+
+  .aven-capability-topology {
+    grid-template-columns: 1fr;
+  }
+
+  .aven-capability-topology li.is-inferred {
+    grid-column: auto;
+  }
+}
+
+@media (max-width: 540px) {
+  .aven-automation-view {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .aven-automation-card-top,
+  .aven-automation-registry-card .aven-automation-card-top,
+  .aven-automation-alert .aven-automation-card-top {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .aven-automation-card-actions,
+  .aven-automation-form-actions,
+  .workflow-actions,
+  .approval-bridge-pane__actions,
+  .terminal-actions,
+  .git-actions,
+  .aven-capability-session-actions {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .aven-automation-card-actions button,
+  .aven-automation-form-actions button,
+  .workflow-actions button,
+  .approval-bridge-pane__actions button,
+  .terminal-actions button,
+  .git-actions button,
+  .aven-capability-session-actions button {
+    width: 100%;
+  }
+
+  .workflow-detail,
+  .approval-bridge-pane__row,
+  .sandbox-device dl {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+
+  .workflow-detail dd,
+  .approval-bridge-pane__row dd,
+  .sandbox-device dd {
+    padding-bottom: 4px;
+  }
+
+  .approval-bridge-pane {
+    padding: 15px;
+  }
+
+  .approval-bridge-pane__actions {
+    margin-right: -15px;
+    margin-bottom: -15px;
+    margin-left: -15px;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+
+  #pane-content > .preview-card,
+  #sandbox-terminal {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+
+  #sandbox-topology {
+    margin-right: 12px;
+    margin-left: 12px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .aven-automation-view *,
+  .workflow-card *,
+  .approval-bridge-pane *,
+  .terminal-surface *,
+  .git-settings *,
+  #sandbox-topology *,
+  .aven-capability-session * {
+    scroll-behavior: auto !important;
+    transition-duration: .01ms !important;
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
